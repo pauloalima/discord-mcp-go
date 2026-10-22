@@ -1,16 +1,18 @@
 services:
-  discord-mcp-go:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: 0xopcode/discord-mcp-go:latest
-    container_name: discord-mcp-go
+  discord-mcp:
+    image: ghcr.io/0xopcode/discord-mcp-go:latest
+    container_name: discord-mcp
     restart: unless-stopped
     ports:
-      - "8085:8085"
+      - "3002:8085"
     environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID:-}
-      - DISCORD_BLACKLISTED_GUILDS=${DISCORD_BLACKLISTED_GUILDS:-}
-      - PORT=8085
-      - TRANSPORT=sse
+      DISCORD_TOKEN: "${DISCORD_TOKEN}"
+      DISCORD_GUILD_ID: "${DISCORD_GUILD_ID:-}"
+      DISCORD_OWNER_USER_ID: "${DISCORD_OWNER_USER_ID:-}"
+      TRANSPORT: "sse"
+      PORT: "8085"
+    volumes:
+      - discord-mcp-data:/root/.config/discord-mcp-go
+
+volumes:
+  discord-mcp-data:
